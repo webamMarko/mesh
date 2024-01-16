@@ -16,8 +16,7 @@
         "phpunit/phpunit": "^10.5"
     },
     "require": {
-        "guzzlehttp/guzzle": "^7.8",
-        "pju/helpers": "^1.0"
+        "guzzlehttp/guzzle": "^7.8"
     },
     "repositories": [
         {
