@@ -1,5 +1,5 @@
 {
-    "name": "pju/mesh",
+    "name": "webam/mesh",
     "description": "Mesh module for PJU service autodiscovery",
     "autoload": {
         "psr-4": {
