@@ -1,0 +1,21 @@
+{
+    "ServiceName": {
+        "endpoints": [
+            {
+                "path": "example_path",
+                "method": "GET",
+                "params": [
+                    {"name": "param1", "type": "string"},
+                    {"name": "param2", "type": "int"}
+                ]
+            },
+            {
+                "path": "another_path",
+                "method": "POST",
+                "params": [
+                    {"name": "param1", "type": "string"}
+                ]
+            }
+        ]
+    }
+}
