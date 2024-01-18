@@ -3,30 +3,22 @@
 namespace Pju\Mesh;
 
 use GuzzleHttp\Client;
+use Pju\Mesh\Registration;
 
 abstract class Autodiscovery {
     protected static $serviceName = "Ping";
-    protected $endpoints;
-    protected $hostname;
-    protected $client;
+    protected string $hostname;
+    protected array $endpoint;
+    protected array $service;
+    protected Registration $registration;
+    protected Client $client;
+
 
     public function __construct() {
-        $serviceFilePath = $this->getServiceFilePath();
-        if (!file_exists($serviceFilePath)) {
-            throw new \Exception("Service file not found");
-        }
-
-        $services = json_decode(file_get_contents($serviceFilePath), true);
-        if (isset($services[static::$serviceName]['endpoints'])) {
-            $this->endpoints = $services[static::$serviceName]['endpoints'];
-        } else {
-            throw new \Exception("Service not defined or endpoints missing");
-        }
-
-        if (isset($services[static::$serviceName]['hostname'])) {
-            $this->hostname = $services[static::$serviceName]['hostname'];
-        }
-
+        $this->registration = new Registration();
+        $this->service = $this->registration->getService(self::$serviceName);
+        $this->hostname = $this->service["hostname"];
+        $this->endpoints = $this->service["endpoints"];
         $this->client = new Client(); // Initialize Guzzle client
     }
 
@@ -36,13 +28,8 @@ abstract class Autodiscovery {
             return $this->handleRequest($endpoint, $arguments);
         }
            
-
         throw new \Exception("Endpoint not found");
     }
-
-    protected function getServiceFilePath() {
-        return __DIR__ . '/service.json';
-    }    
 
     public function getEndpointParams($endpoint, $arguments) {
         $arguments = $arguments[0];
