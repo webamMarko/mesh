@@ -75,6 +75,17 @@ class Registration
     }
 
     protected function getServiceFilePath(string $serviceName = '') {
-        return $_SERVER['DOCUMENT_ROOT'] . "/{$serviceName}service.json";
+        return self::getRootDir() . "/{$serviceName}service.json";
     }
+
+    public static function getRootDir(): string
+	{
+		if (isset($_ENV['ROOT_DIR'])) return $_ENV['ROOT_DIR'];
+
+		// Find root vendor folder path of composer
+		$reflection = new \ReflectionClass(\Composer\Autoload\ClassLoader::class);
+
+		return dirname($reflection->getFileName(), 3);
+	}
+
 }
