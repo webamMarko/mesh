@@ -15,8 +15,13 @@ class Autodiscovery {
     protected Client $client;
 
 
-    public function __construct(Registration $registration) {
-        $this->registration = $registration;
+    public function __construct(Registration $registration = null) {
+        if ($registration) {
+            $this->registration = $registration;
+        } else {
+            $this->registration = new Registration();
+        }
+        
         $this->service = $this->registration->getService(self::$serviceName);
         $this->hostname = $this->service["hostname"];
         $this->endpoints = $this->service["endpoints"];

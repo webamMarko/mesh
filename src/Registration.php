@@ -8,8 +8,13 @@ class Registration
 
     private $redis;
 
-    public function __construct()
+    public function __construct(\Redis $redis = null)
     {
+        if ($redis) {
+            $this->redis = $redis;
+            return;
+        }
+
         if (!extension_loaded("redis")) {
             throw new \Error("Please install redis extension to use this class", 501);
         }
@@ -18,19 +23,21 @@ class Registration
             throw new \Error("MESH_REDIS_HOSTNAME and MESH_REDIS_PORT must be set in ENV", 501);
         }
 
-        $this->redis = new \Redis();
-        $this->redis->connect($_ENV["MESH_REDIS_HOSTNAME"], $_ENV["MESH_REDIS_PORT"]);
+        $redis = new \Redis();
+        $redis->connect($_ENV["MESH_REDIS_HOSTNAME"], $_ENV["MESH_REDIS_PORT"]);
+
+        $this->setRedis($redis);
     }
 
     public function registerService($serviceName)
     {
-        $serviceSpec = file_get_contents($this->getServiceFilePath());
-        $this->redis->hset(self::REGISTRATION_LIST, $serviceName, $serviceSpec);
+        $serviceSpec = $this->getServiceSpec();
+        return $this->redis->hset(self::REGISTRATION_LIST, $serviceName, $serviceSpec);
     }
 
     public function deregisterService($serviceName)
     {
-        $this->redis->hdel(self::REGISTRATION_LIST, $serviceName);
+        return $this->redis->hdel(self::REGISTRATION_LIST, $serviceName);
     }
 
     public function getService($serviceName)
@@ -57,6 +64,14 @@ class Registration
         }
 
         return $servicesSpec;
+    }
+
+    public function getServiceSpec() {
+        return file_get_contents($this->getServiceFilePath());
+    }
+
+    public function setRedis(\Redis $redis) {
+        $this->redis = $redis;
     }
 
     protected function getServiceFilePath() {
