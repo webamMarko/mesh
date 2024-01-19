@@ -19,12 +19,6 @@
     "require": {
         "guzzlehttp/guzzle": "^7.8"
     },
-    "repositories": [
-        {
-          "type": "composer",
-          "url": "https://gitlab.com/api/v4/group/15872768/-/packages/composer/"
-        }
-    ],
     "config": {
         "allow-plugins": {
             "php-http/discovery": true
