@@ -2,8 +2,6 @@
 
 namespace Pju\Mesh;
 
-use Redis;
-
 class Registration
 {
     const REGISTRATION_LIST = 'mesh_registration_list';
@@ -17,10 +15,10 @@ class Registration
         }
 
         if (!isset($_ENV["MESH_REDIS_HOSTNAME"]) || !isset($_ENV["MESH_REDIS_PORT"])) {
-            throw new \Error("MESH_REDIS_HOSTNAME and MESH_REDIS_PORT must be set in .env", 501);
+            throw new \Error("MESH_REDIS_HOSTNAME and MESH_REDIS_PORT must be set in ENV", 501);
         }
 
-        $this->redis = new Redis();
+        $this->redis = new \Redis();
         $this->redis->connect($_ENV["MESH_REDIS_HOSTNAME"], $_ENV["MESH_REDIS_PORT"]);
     }
 

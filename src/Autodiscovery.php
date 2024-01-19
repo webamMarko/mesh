@@ -5,21 +5,22 @@ namespace Pju\Mesh;
 use GuzzleHttp\Client;
 use Pju\Mesh\Registration;
 
-abstract class Autodiscovery {
-    protected static $serviceName = "Ping";
+class Autodiscovery {
+    protected static $serviceName;
     protected string $hostname;
     protected array $endpoint;
+    protected array $endpoints;
     protected array $service;
     protected Registration $registration;
     protected Client $client;
 
 
-    public function __construct() {
-        $this->registration = new Registration();
+    public function __construct(Registration $registration) {
+        $this->registration = $registration;
         $this->service = $this->registration->getService(self::$serviceName);
         $this->hostname = $this->service["hostname"];
         $this->endpoints = $this->service["endpoints"];
-        $this->client = new Client(); // Initialize Guzzle client
+        $this->client = new Client();
     }
 
     public function __call($methodName, $arguments) {
@@ -32,7 +33,7 @@ abstract class Autodiscovery {
     }
 
     public function getEndpointParams($endpoint, $arguments) {
-        $arguments = $arguments[0];
+        $arguments = $arguments[0] ?? [];
         // Map arguments to named parameters based on endpoint definition
         $params = [];
         foreach ($endpoint['params'] as $param) {
@@ -87,5 +88,9 @@ abstract class Autodiscovery {
 
     public function setClient(Client $client) {
         $this->client = $client;
+    }
+
+    public function setRegistration(Registration $registration) {
+        $this->registration = $registration;
     }
 }
