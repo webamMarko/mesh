@@ -23,8 +23,5 @@
         "allow-plugins": {
             "php-http/discovery": true
         }
-    },
-    "scripts": {
-        "pre-update-cmd": "echo \"pre-update-cmd\\n\""
     }
 }
