@@ -25,7 +25,6 @@
         }
     },
     "scripts": {
-        "pre-install-cmd": "validate_service_json.php",
-        "pre-update-cmd": "validate_service_json.php"
+        "pre-update-cmd": "test -f service.json"
     }
 }
