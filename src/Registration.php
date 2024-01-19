@@ -29,9 +29,9 @@ class Registration
         $this->setRedis($redis);
     }
 
-    public function registerService($serviceName)
+    public function registerService($serviceName = '')
     {
-        $serviceSpec = $this->getServiceSpec();
+        $serviceSpec = $this->getServiceSpec($serviceName);
         return $this->redis->hset(self::REGISTRATION_LIST, $serviceName, $serviceSpec);
     }
 
@@ -66,15 +66,15 @@ class Registration
         return $servicesSpec;
     }
 
-    public function getServiceSpec() {
-        return file_get_contents($this->getServiceFilePath());
+    public function getServiceSpec(string $serviceName = '') {
+        return file_get_contents($this->getServiceFilePath($serviceName));
     }
 
     public function setRedis(\Redis $redis) {
         $this->redis = $redis;
     }
 
-    protected function getServiceFilePath() {
-        return $_SERVER['DOCUMENT_ROOT'] . '/service.json';
+    protected function getServiceFilePath(string $serviceName = '') {
+        return $_SERVER['DOCUMENT_ROOT'] . "/{$serviceName}service.json";
     }
 }
