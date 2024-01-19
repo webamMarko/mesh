@@ -25,6 +25,6 @@
         }
     },
     "scripts": {
-        "pre-update-cmd": "test -f service.json"
+        "pre-update-cmd": "echo \"pre-update-cmd\\n\""
     }
 }
